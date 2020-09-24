@@ -61,6 +61,7 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
             #print("year end results:", costs[-1])
             r.increase(rental_increase)
             b.taxAppraisal()
+            b._rent.increase(rental_increase)
         r_cost = r.update()
         b_cost, b_sell = b.update(b.monthlyPayment()) #includes rental if applicable
         rental += r_cost
