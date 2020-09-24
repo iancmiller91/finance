@@ -9,7 +9,7 @@ The script can be run with all defalt values via: `python3 rent_vs_by.py`
 
 A list of all the values can be found via: `python3 rent_vs_by.py -h`
 
-The default assumptions:
+## The default assumptions:
     * purchase_price = 600000
     * down_percent = .20
     * years=30
