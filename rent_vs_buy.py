@@ -21,7 +21,7 @@ import argparse
 
 def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_cost,\
         tax, appreciation, insurance, market_gains, current_rent, rental_increase, deposit,\
-        rental_income):
+        rental_income, plot):
 
     months = years*12
     market_gains_p = 1+market_gains/12
@@ -37,10 +37,10 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
     print("total paid on mortgage: $", round(m.totalPaid(),2), "total paid: $", \
             round(down+m.totalPaid(),2))
 
-    #print("amotorization schedule")
-    #for month in range(0,months):
-    #    principle, i_pmt, p_pmt = m.update(payment, principle)
-        #print("month: ", month, "\t principle: ", principle)
+    print("amotorization schedule")
+#    for month in range(0,months):
+#        principle, i_pmt, p_pmt = m.update(payment)
+#        print("month: ", month, "\t principle: ", principle, "\ti_pmt: ", i_pmt, "\tp_pmt: ", p_pmt)
     house_rental = rent.Rent(rental_income,0)
     b = buy.Buy(purchase_price, down_decimal, interest, years, closing, tax, appreciation,\
             insurance,selling_cost,house_rental)
@@ -78,10 +78,11 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
             print("buying_opp cost is better after month: ", month, month/12.)
             flag[1] = 0
         if r_opp_cost > opp_cost_after_sale and flag[2]:
-            print("buying cost is better with sale of property after month: ", month, month/12.) 
+            print("buying cost is better with sale of property after month: ", month, month/12.)
             flag[2] = 0
         if 0 > opp_cost_after_sale and flag[3]:
             print("reselling makes a profit after: ", month, month/12.)
+            flag[3] = 0
 
     print("monthly cost for last payment year 30: ", b_cost)
 
@@ -103,13 +104,13 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
         ax[0].legend()
         ax[1].legend()
         plt.show()
-    if 1:
+    if plot:
         fig, ax = plt.subplots()
         ax.plot(range(0,months), purchase_opp_costs, label = 'purchase opp costs')
         ax.plot(range(0,months), resale_opp_costs, label = 'resale opp costs')
         ax.plot(range(0,months), rent_opp_costs, label = 'rent costs')
         title = "purchase_price:"+str(purchase_price)+"; rent: "+str(current_rent)+\
-                "; renter: "+str(house_rental.rent())
+                "; renter: "+str(rental_income)
         ax.set_title(title)
         ax.set_xlabel('months')
         ax.set_ylabel('$')
@@ -121,25 +122,26 @@ def main():
 
     parser.add_argument('-i', '--interest', default=3.0, type=float, dest='interest')
     parser.add_argument('-y', '--loan_years', default=30, type=float,  dest='years')
-    parser.add_argument('-p', '--purchase_price', default=600000.0, type=float, dest='purchase_price')
+    parser.add_argument('-p', '--purchase_price', default=800000.0, type=float, dest='purchase_price')
     parser.add_argument('-d', '--down', default=.2, type=float, dest='down')
-    parser.add_argument('-c', '--closing', default=.03, type=float, dest='closing')
+    parser.add_argument('-c', '--closing', default=.0183, type=float, dest='closing')
     parser.add_argument('-s', '--selling', default=.07, type=float, dest='selling_cost')
-    parser.add_argument('-t', '--tax', default=.015, type=float, dest='tax')
+    parser.add_argument('-t', '--tax', default=.0125, type=float, dest='tax')
     parser.add_argument('-a', '--appreciation', default=.01, type=float, dest='appreciation')
-    parser.add_argument('-n', '--insurance', default=.005, type=float, dest='insurance')
+    parser.add_argument('-n', '--insurance', default=.003, type=float, dest='insurance')
     parser.add_argument('-g', '--market_gains', default=.06, type=float, dest='market_gains')
-    parser.add_argument('-r', '--current_rent', default=1600.0, type=float, dest='current_rent')
+    parser.add_argument('-r', '--current_rent', default=2000.0, type=float, dest='current_rent')
     parser.add_argument('-R', '--rental_income', default=0.0, type=float, dest='rental_income')
     parser.add_argument('-I', '--rental_increase', default=0.0075, type=float, dest='rental_increase')
     parser.add_argument('-D', '--deposit', default=3200.0, type=float, dest='deposit')
+    parser.add_argument('-z', '--plot', default=0, type=bool, dest='plot')
 
     args = parser.parse_args()
     print(args)
     rentVsBuy(args.purchase_price, args.down, args.years, args.interest,\
             args.closing, args.selling_cost, args.tax, args.appreciation, args.insurance,\
             args.market_gains, args.current_rent, args.rental_increase, args.deposit,\
-            args.rental_income)
+            args.rental_income, args.plot)
 
 if __name__ == '__main__':
     main()

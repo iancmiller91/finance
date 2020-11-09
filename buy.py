@@ -29,7 +29,10 @@ class Buy:
         return payment, self._sell_profit
 
     def taxAppraisal(self):
-        self._tax_appraisal = self._current_value
+        if self._current_value/self._tax_appraisal > 1.02: #CA tax can't go up by more than 2%
+            self._tax_appraisal = self._tax_appraisal*1.02
+        else:
+            self._tax_appraisal = self._current_value
 
     def monthlyPayment(self):
         return self._mortgage.monthlyPayment()
