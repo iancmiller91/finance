@@ -21,7 +21,7 @@ import argparse
 
 def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_cost,\
         tax, appreciation, insurance, market_gains, current_rent, rental_increase, deposit,\
-        rental_income, plot):
+        rental_income, upfront_repair, plot):
 
     months = years*12
     market_gains_p = 1+market_gains/12
@@ -30,7 +30,7 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
 
     m = mortgage.Mortgage(interest, years, principle)
     payment = m.monthlyPayment()
-    print ("down: $", down)
+    print ("down: $", down, "\tdown+repair+closing: ", down+upfront_repair+closing*purchase_price)
     print("monthly mortgage payment: $", payment, "total monthly: $ ", \
             round(payment+(insurance+tax)*purchase_price/12.0,2), "cost to us: ",\
             round(payment+(insurance+tax)*purchase_price/12.0 - rental_income,2 ))
@@ -49,7 +49,7 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
 
     #One time costs:
     rental = r.deposit()
-    purchase = closing*purchase_price + down
+    purchase = closing*purchase_price + down + upfront_repair
     b_opp_cost = purchase
     r_opp_cost = rental
     opp_cost_after_sale = purchase_price*(selling_cost+closing)
@@ -135,13 +135,14 @@ def main():
     parser.add_argument('-I', '--rental_increase', default=0.0075, type=float, dest='rental_increase')
     parser.add_argument('-D', '--deposit', default=3200.0, type=float, dest='deposit')
     parser.add_argument('-z', '--plot', default=0, type=bool, dest='plot')
+    parser.add_argument('-q', '--repair_upfront', default=0, type=float, dest='repair_upfront')
 
     args = parser.parse_args()
     print(args)
     rentVsBuy(args.purchase_price, args.down, args.years, args.interest,\
             args.closing, args.selling_cost, args.tax, args.appreciation, args.insurance,\
             args.market_gains, args.current_rent, args.rental_increase, args.deposit,\
-            args.rental_income, args.plot)
+            args.rental_income, args.repair_upfront, args.plot)
 
 if __name__ == '__main__':
     main()
