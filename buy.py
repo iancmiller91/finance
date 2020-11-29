@@ -1,7 +1,7 @@
 import mortgage
 import rent
 class Buy:
-    def __init__(self, price, down_percent, interest, years, closing, taxes, appreciation, insurance, selling_cost, rent):
+    def __init__(self, price, down_percent, interest, years, closing, taxes, appreciation, insurance, selling_cost, rent, value):
         self._price = float(price)
         self._down = float(price*down_percent)
         self._closing = float(closing)
@@ -9,8 +9,8 @@ class Buy:
         self._appreciation = float(appreciation)/12.0
         self._rent = rent
         self._mortgage = mortgage.Mortgage(interest, years, price-self._down)
-        self._current_value = self._price
-        self._tax_appraisal = self._price
+        self._current_value = float(value)
+        self._tax_appraisal = float(value)
         self._insurance = float(insurance/12)
         self._selling_cost = selling_cost
         self._sell_profit = 0

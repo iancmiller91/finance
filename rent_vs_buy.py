@@ -21,8 +21,9 @@ import argparse
 
 def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_cost,\
         tax, appreciation, insurance, market_gains, current_rent, rental_increase, deposit,\
-        rental_income, upfront_repair, plot):
-
+        rental_income, upfront_repair, value, plot):
+    if value == 0:
+        value = purchase_price
     months = years*12
     market_gains_p = 1+market_gains/12
     down = purchase_price*down_decimal
@@ -43,7 +44,7 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
 #        print("month: ", month, "\t principle: ", principle, "\ti_pmt: ", i_pmt, "\tp_pmt: ", p_pmt)
     house_rental = rent.Rent(rental_income,0)
     b = buy.Buy(purchase_price, down_decimal, interest, years, closing, tax, appreciation,\
-            insurance,selling_cost,house_rental)
+            insurance,selling_cost,house_rental,value)
     r = rent.Rent(current_rent, deposit)
     costs = []
 
@@ -70,7 +71,10 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
         r_opp_cost = r_opp_cost*market_gains_p + r_cost
         opp_cost_after_sale = b_opp_cost - b_sell
         costs.append([rental, r_opp_cost, purchase, b_opp_cost, opp_cost_after_sale])
-
+        
+        if month == 60:
+            print("year 5, sale: $", round(opp_cost_after_sale), "rent: $", round(r_opp_cost),\
+                    "diff: $", round(opp_cost_after_sale-r_opp_cost)) 
         if rental > purchase and flag[0]:
             print("straight costs crossing at month: ", month, month/12.)
             flag[0] = 0
@@ -136,13 +140,14 @@ def main():
     parser.add_argument('-D', '--deposit', default=3200.0, type=float, dest='deposit')
     parser.add_argument('-z', '--plot', default=0, type=bool, dest='plot')
     parser.add_argument('-q', '--repair_upfront', default=0, type=float, dest='repair_upfront')
+    parser.add_argument('-v', '--value', default=0, type=float, dest='value')
 
     args = parser.parse_args()
     print(args)
     rentVsBuy(args.purchase_price, args.down, args.years, args.interest,\
             args.closing, args.selling_cost, args.tax, args.appreciation, args.insurance,\
             args.market_gains, args.current_rent, args.rental_increase, args.deposit,\
-            args.rental_income, args.repair_upfront, args.plot)
+            args.rental_income, args.repair_upfront, args.value, args.plot)
 
 if __name__ == '__main__':
     main()
