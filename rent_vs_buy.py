@@ -82,10 +82,10 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
             #print("straight costs crossing at month: ", month, month/12.)
             flag[0] = 0
         if r_opp_cost > b_opp_cost and flag [1]:
-            print("buying_opp cost is better after month: ", month, month/12.)
+            print("buying is better w/o sale of property after month:  ", month, "years: ",round(month/12.,2))
             flag[1] = 0
         if r_opp_cost > opp_cost_after_sale and flag[2]:
-            print("buying cost is better with sale of property after month: ", month, month/12.)
+            print("buying is better with sale of property after month: ", month, "year: ",round(month/12.,2))
             flag[2] = 0
         if 0 > opp_cost_after_sale and flag[3]:
             #print("reselling makes a profit after: ", month, month/12.)
