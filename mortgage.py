@@ -1,7 +1,7 @@
 #amortizing loan calc
 class Mortgage:
     def __init__(self,interest, years, total):
-        self._interest = float(interest/(12*100)) #convert percent interest to interest/mo
+        self._interest = float(interest/(12)) #convert interest to interest/mo
         self._months = int(years*12)
         self._amount = float(round(total,2))
         self._principle = float(round(total,2))

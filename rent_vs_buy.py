@@ -7,7 +7,7 @@ import argparse
     #purchase_price = 600000
     #down_percent = .20
     #years=30
-    #interest = 3.0
+    #interest = .03
     #closing = .03 #.02824 (including some tax and home insurance)
     #selling_cost = .07
     #tax = .015 #.01311
@@ -124,7 +124,7 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
 def main(): 
     parser = argparse.ArgumentParser(description='Rent vs buying a house calculator')
 
-    parser.add_argument('-i', '--interest', default=3.0, type=float, dest='interest')
+    parser.add_argument('-i', '--interest', default=.03, type=float, dest='interest')
     parser.add_argument('-y', '--loan_years', default=30, type=float,  dest='years')
     parser.add_argument('-p', '--purchase_price', default=800000.0, type=float, dest='purchase_price')
     parser.add_argument('-d', '--down', default=.2, type=float, dest='down')
