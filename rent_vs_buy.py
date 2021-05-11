@@ -21,7 +21,7 @@ import argparse
 
 def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_cost,\
         tax, appreciation, insurance, market_gains, current_rent, rental_increase, deposit,\
-        rental_income, upfront_repair, value, plot):
+        rental_income, upfront_repair, value, plot, rental_stop):
     if value == 0:
         value = purchase_price
     months = years*12
@@ -35,10 +35,10 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
     print("monthly mortgage payment: $", payment, "total monthly: $ ", \
             round(payment+(insurance+tax)*purchase_price/12.0,2), "cost to us: ",\
             round(payment+(insurance+tax)*purchase_price/12.0 - rental_income,2 ))
-    print("total paid on mortgage: $", round(m.totalPaid(),2), "total paid: $", \
-            round(down+m.totalPaid(),2))
+    #print("total paid on mortgage: $", round(m.totalPaid(),2), "total paid: $", \
+    #        round(down+m.totalPaid(),2))
 
-    print("amotorization schedule")
+    #print("amotorization schedule")
 #    for month in range(0,months):
 #        principle, i_pmt, p_pmt = m.update(payment)
 #        print("month: ", month, "\t principle: ", principle, "\ti_pmt: ", i_pmt, "\tp_pmt: ", p_pmt)
@@ -75,8 +75,11 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
         if month == 60:
             print("year 5, sale: $", round(opp_cost_after_sale), "rent: $", round(r_opp_cost),\
                     "diff: $", round(opp_cost_after_sale-r_opp_cost)) 
+            if rental_stop:
+                b._rent._rent+= r._rent
+                print("rent income increasing at year 5 to: ", round(b._rent._rent))
         if rental > purchase and flag[0]:
-            print("straight costs crossing at month: ", month, month/12.)
+            #print("straight costs crossing at month: ", month, month/12.)
             flag[0] = 0
         if r_opp_cost > b_opp_cost and flag [1]:
             print("buying_opp cost is better after month: ", month, month/12.)
@@ -85,10 +88,10 @@ def rentVsBuy(purchase_price, down_decimal, years, interest, closing, selling_co
             print("buying cost is better with sale of property after month: ", month, month/12.)
             flag[2] = 0
         if 0 > opp_cost_after_sale and flag[3]:
-            print("reselling makes a profit after: ", month, month/12.)
+            #print("reselling makes a profit after: ", month, month/12.)
             flag[3] = 0
 
-    print("monthly cost for last payment year 30: ", b_cost)
+    #print("monthly cost for last payment year 30: ", b_cost)
 
     #plots
     purchase_costs = [c[2] for c in costs]
@@ -141,13 +144,14 @@ def main():
     parser.add_argument('-z', '--plot', default=0, type=bool, dest='plot')
     parser.add_argument('-q', '--repair_upfront', default=0, type=float, dest='repair_upfront')
     parser.add_argument('-v', '--value', default=0, type=float, dest='value')
+    parser.add_argument('-S', '--rental_stop', default=False, type=bool, dest='rental_stop')
 
     args = parser.parse_args()
     print(args)
     rentVsBuy(args.purchase_price, args.down, args.years, args.interest,\
             args.closing, args.selling_cost, args.tax, args.appreciation, args.insurance,\
             args.market_gains, args.current_rent, args.rental_increase, args.deposit,\
-            args.rental_income, args.repair_upfront, args.value, args.plot)
+            args.rental_income, args.repair_upfront, args.value, args.plot, args.rental_stop)
 
 if __name__ == '__main__':
     main()
